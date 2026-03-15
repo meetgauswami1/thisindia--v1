@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "ഹോം",
+    "explore": "എക്സ്പ്ലോർ",
+    "tripPlanner": "ട്രിപ്പ് പ്ലാനർ",
+    "mapExplorer": "മാപ്പ് എക്സ്പ്ലോറർ",
+    "aiAssistant": "എഐ അസിസ്റ്റന്റ്",
+    "savedTrips": "സേവ് ചെയ്ത യാത്രകൾ",
+    "language": "ഭാഷ"
+  },
+  "pages": {
+    "exploreTitle": "മറഞ്ഞിരിക്കുന്ന ഇടങ്ങൾ കണ്ടെത്തൂ",
+    "tripPlannerTitle": "ട്രിപ്പ് പ്ലാനർ",
+    "savedTripsTitle": "സേവ് ചെയ്ത യാത്രകൾ",
+    "mapExplorerTitle": "മാപ്പ് എക്സ്പ്ലോറർ",
+    "aiAssistantTitle": "എഐ അസിസ്റ്റന്റ്"
+  }
+}

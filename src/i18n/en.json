@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "tripPlanner": "Trip Planner",
+    "mapExplorer": "Map Explorer",
+    "aiAssistant": "AI Assistant",
+    "savedTrips": "Saved Trips",
+    "language": "Language"
+  },
+  "pages": {
+    "exploreTitle": "Explore Hidden Destinations",
+    "tripPlannerTitle": "Trip Planner",
+    "savedTripsTitle": "Saved Trips",
+    "mapExplorerTitle": "Map Explorer",
+    "aiAssistantTitle": "AI Assistant"
+  }
+}

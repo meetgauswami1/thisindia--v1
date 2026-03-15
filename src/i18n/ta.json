@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "முகப்பு",
+    "explore": "ஆராய்வு",
+    "tripPlanner": "பயண திட்டமிடுபவர்",
+    "mapExplorer": "வரைபட ஆராய்வு",
+    "aiAssistant": "ஏஐ உதவியாளர்",
+    "savedTrips": "சேமித்த பயணங்கள்",
+    "language": "மொழி"
+  },
+  "pages": {
+    "exploreTitle": "மறைந்த இடங்களை ஆராயுங்கள்",
+    "tripPlannerTitle": "பயண திட்டமிடுபவர்",
+    "savedTripsTitle": "சேமித்த பயணங்கள்",
+    "mapExplorerTitle": "வரைபட ஆராய்வு",
+    "aiAssistantTitle": "ஏஐ உதவியாளர்"
+  }
+}

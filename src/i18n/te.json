@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "హోమ్",
+    "explore": "అన్వేషణ",
+    "tripPlanner": "ట్రిప్ ప్లానర్",
+    "mapExplorer": "మ్యాప్ ఎక్స్‌ప్లోరర్",
+    "aiAssistant": "ఏఐ అసిస్టెంట్",
+    "savedTrips": "సేవ్ చేసిన ట్రిప్స్",
+    "language": "భాష"
+  },
+  "pages": {
+    "exploreTitle": "దాగి ఉన్న గమ్యస్థానాలను అన్వేషించండి",
+    "tripPlannerTitle": "ట్రిప్ ప్లానర్",
+    "savedTripsTitle": "సేవ్ చేసిన ట్రిప్స్",
+    "mapExplorerTitle": "మ్యాప్ ఎక్స్‌ప్లోరర్",
+    "aiAssistantTitle": "ఏఐ అసిస్టెంట్"
+  }
+}

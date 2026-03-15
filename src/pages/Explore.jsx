@@ -1,0 +1,118 @@
+import { useDeferredValue, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import Attractions from '../components/Attractions'
+import DestinationCard from '../components/DestinationCard'
+import FlightsList from '../components/FlightsList'
+import HotelsList from '../components/HotelsList'
+import ImageGallery from '../components/ImageGallery'
+import ItineraryGenerator from '../components/ItineraryGenerator'
+import Map from '../components/Map'
+import WeatherWidget from '../components/WeatherWidget'
+import { destinations, travelCategories } from '../utils/destinationsData'
+import { useTravelData } from '../utils/TravelDataContext'
+import { useI18n } from '../utils/I18nContext'
+
+function Explore() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { selectedLocation, errors, setActiveMarkerId } = useTravelData()
+  const { t } = useI18n()
+  const category = searchParams.get('category') || 'All'
+  const query = searchParams.get('q') || ''
+  const deferredQuery = useDeferredValue(query)
+  const isSearching = deferredQuery !== query
+
+  const filteredDestinations = useMemo(() => {
+    const searchValue = deferredQuery.trim().toLowerCase()
+    return destinations.filter((destination) => {
+      const categoryMatch = category === 'All' || destination.category === category
+      if (!categoryMatch) {
+        return false
+      }
+      if (!searchValue) {
+        return true
+      }
+      return (
+        destination.name.toLowerCase().includes(searchValue) ||
+        destination.state.toLowerCase().includes(searchValue) ||
+        destination.description.toLowerCase().includes(searchValue)
+      )
+    })
+  }, [category, deferredQuery])
+
+  return (
+    <section className="space-y-6">
+      <header>
+        <h1 className="heading-text text-3xl">{t('pages.exploreTitle')}</h1>
+        <p className="muted-text mt-1 text-sm">Find underrated places across India with AI-ready destination insights.</p>
+        {query && <p className="mt-2 text-sm font-semibold text-primary dark:text-accent">Showing results for "{query}"</p>}
+        {selectedLocation && (
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
+            Coordinates: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
+          </p>
+        )}
+      </header>
+
+      {errors.location && <div className="card-surface p-4 text-sm text-rose-500">{errors.location}</div>}
+
+      <div className="flex flex-wrap gap-2">
+        {['All', ...travelCategories].map((item) => (
+          <button
+            key={item}
+            onClick={() =>
+              setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                if (item === 'All') {
+                  next.delete('category')
+                } else {
+                  next.set('category', item)
+                }
+                return next
+              })
+            }
+            className={`rounded-full px-4 py-2 text-sm font-semibold ${
+              category === item
+                ? 'bg-sunset-gradient text-white'
+                : 'bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-200'
+            } border border-orange-100 shadow-sm transition-colors duration-300 dark:border-slate-700`}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+
+      <Map
+        onMarkerSelect={(item) => {
+          const target = document.getElementById(`attraction-${item.id}`)
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        }}
+      />
+
+      <Attractions onCardHover={(item) => setActiveMarkerId(item.id)} />
+      <WeatherWidget />
+      <HotelsList />
+      <FlightsList />
+      <ImageGallery />
+      <ItineraryGenerator />
+
+      {isSearching ? (
+        <div className="card-surface p-5 text-sm text-slate-500 dark:text-slate-300">
+          <span className="animate-pulse">Searching destinations...</span>
+        </div>
+      ) : filteredDestinations.length ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredDestinations.map((destination) => (
+            <DestinationCard key={destination.id} destination={destination} />
+          ))}
+        </div>
+      ) : (
+        <div className="card-surface border-dashed p-8 text-center text-slate-500 dark:text-slate-300">
+          No destinations matched your search. Try another city, state, or hidden destination.
+        </div>
+      )}
+    </section>
+  )
+}
+
+export default Explore

@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "ಮುಖ್ಯಪುಟ",
+    "explore": "ಅನ್ವೇಷಿಸಿ",
+    "tripPlanner": "ಟ್ರಿಪ್ ಪ್ಲ್ಯಾನರ್",
+    "mapExplorer": "ನಕ್ಷೆ ಅನ್ವೇಷಕ",
+    "aiAssistant": "ಎಐ ಸಹಾಯಕ",
+    "savedTrips": "ಉಳಿಸಿದ ಪ್ರಯಾಣಗಳು",
+    "language": "ಭಾಷೆ"
+  },
+  "pages": {
+    "exploreTitle": "ಅಡಗಿರುವ ತಾಣಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+    "tripPlannerTitle": "ಟ್ರಿಪ್ ಪ್ಲ್ಯಾನರ್",
+    "savedTripsTitle": "ಉಳಿಸಿದ ಪ್ರಯಾಣಗಳು",
+    "mapExplorerTitle": "ನಕ್ಷೆ ಅನ್ವೇಷಕ",
+    "aiAssistantTitle": "ಎಐ ಸಹಾಯಕ"
+  }
+}

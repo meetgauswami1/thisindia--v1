@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "होम",
+    "explore": "एक्सप्लोर",
+    "tripPlanner": "ट्रिप प्लानर",
+    "mapExplorer": "मैप एक्सप्लोरर",
+    "aiAssistant": "एआई असिस्टेंट",
+    "savedTrips": "सेव्ड ट्रिप्स",
+    "language": "भाषा"
+  },
+  "pages": {
+    "exploreTitle": "छुपे हुए गंतव्यों की खोज",
+    "tripPlannerTitle": "ट्रिप प्लानर",
+    "savedTripsTitle": "सेव्ड ट्रिप्स",
+    "mapExplorerTitle": "मैप एक्सप्लोरर",
+    "aiAssistantTitle": "एआई असिस्टेंट"
+  }
+}

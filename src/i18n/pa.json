@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "ਹੋਮ",
+    "explore": "ਐਕਸਪਲੋਰ",
+    "tripPlanner": "ਟ੍ਰਿਪ ਪਲਾਨਰ",
+    "mapExplorer": "ਮੈਪ ਐਕਸਪਲੋਰਰ",
+    "aiAssistant": "ਏਆਈ ਅਸਿਸਟੈਂਟ",
+    "savedTrips": "ਸੇਵ ਕੀਤੀਆਂ ਟ੍ਰਿਪਾਂ",
+    "language": "ਭਾਸ਼ਾ"
+  },
+  "pages": {
+    "exploreTitle": "ਲੁਕੇ ਹੋਏ ਗੰਤੀਵਾਂ ਦੀ ਖੋਜ ਕਰੋ",
+    "tripPlannerTitle": "ਟ੍ਰਿਪ ਪਲਾਨਰ",
+    "savedTripsTitle": "ਸੇਵ ਕੀਤੀਆਂ ਟ੍ਰਿਪਾਂ",
+    "mapExplorerTitle": "ਮੈਪ ਐਕਸਪਲੋਰਰ",
+    "aiAssistantTitle": "ਏਆਈ ਅਸਿਸਟੈਂਟ"
+  }
+}
