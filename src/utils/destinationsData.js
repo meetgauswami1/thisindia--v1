@@ -7,9 +7,9 @@ export const destinations = [
     description:
       'A quiet town of ornate baoris, blue lanes, and palace murals away from the mainstream Rajasthan circuit.',
     image:
-      'https://images.unsplash.com/photo-1590050752117-238cb0fb12c2?auto=format&fit=crop&w=1200&q=80',
+      'https://optimatravels.com/images/rajasthan-images/stepwells-bundi-head.jpg',
     heroImage:
-      'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1800&q=80',
+      'https://optimatravels.com/images/rajasthan-images/stepwells-bundi-head.jpg',
     uniqueness: 92,
     popularity: 28,
     weather: { temp: '23°C', rainProbability: '18%', bestSeason: 'Oct to Mar', comfort: 'Very Good' },
@@ -25,9 +25,9 @@ export const destinations = [
     description:
       'Village canals, paddy islands below sea level, and serene houseboat routes through authentic Kerala life.',
     image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+      'https://alleppeyboating.com/storage/boat_images/5kir2bcjZwxEVCJtJrkfsqttaHMxMMtcUxFU59zs.jpg',
     heroImage:
-      'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1800&q=80',
+      'https://alleppeyboating.com/storage/boat_images/5kir2bcjZwxEVCJtJrkfsqttaHMxMMtcUxFU59zs.jpg',
     uniqueness: 90,
     popularity: 34,
     weather: { temp: '28°C', rainProbability: '42%', bestSeason: 'Nov to Feb', comfort: 'Good' },
@@ -43,9 +43,9 @@ export const destinations = [
     description:
       'Beyond the famous monument, explore old Patan streets, patola weaving, and lesser-known architectural gems.',
     image:
-      'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80',
+      'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/0b/f4/32/80.jpg',
     heroImage:
-      'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1800&q=80',
+      'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/0b/f4/32/80.jpg',
     uniqueness: 86,
     popularity: 46,
     weather: { temp: '26°C', rainProbability: '12%', bestSeason: 'Oct to Feb', comfort: 'Very Good' },
@@ -97,9 +97,9 @@ export const destinations = [
     description:
       'The world’s largest river island known for neo-vaishnavite monasteries, mask-making, and tranquil Brahmaputra views.',
     image:
-      'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80',
+      'https://footloosedev.com/wp-content/uploads/2018/01/majuli-island-bamboo-cottage.jpg',
     heroImage:
-      'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&w=1800&q=80',
+      'https://footloosedev.com/wp-content/uploads/2018/01/majuli-island-bamboo-cottage.jpg',
     uniqueness: 91,
     popularity: 33,
     weather: { temp: '25°C', rainProbability: '40%', bestSeason: 'Nov to Mar', comfort: 'Good' },
@@ -113,7 +113,6 @@ export const travelCategories = [
   'Heritage',
   'Nature',
   'Adventure',
-  'Food Trails',
   'Spiritual',
 ]
 

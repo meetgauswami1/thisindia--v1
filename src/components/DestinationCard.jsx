@@ -3,19 +3,24 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getHiddenGemScore } from '../utils/travelUtils'
 import HiddenGemBadge from './HiddenGemBadge'
 
-function DestinationCard({ destination }) {
+function DestinationCard({ destination, onSelect }) {
   const score = getHiddenGemScore(destination.popularity, destination.uniqueness)
   const navigate = useNavigate()
-  const fallbackImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1200&q=80'
+  const fallbackImage = `https://source.unsplash.com/1200x800/?${encodeURIComponent(`${destination.name}, ${destination.state}, india travel`)}`.replaceAll('%20', '+')
 
   return (
     <Motion.article
       whileHover={{ y: -6 }}
-      className="card-surface group overflow-hidden"
+      onClick={() => {
+        if (onSelect) {
+          onSelect(destination)
+        }
+      }}
+      className={`card-surface group overflow-hidden ${onSelect ? 'cursor-pointer' : ''}`}
     >
       <div className="overflow-hidden">
         <img
-          src={destination.image}
+          src={destination.heroImage || destination.image}
           alt={destination.name}
           loading="lazy"
           onError={(event) => {
@@ -37,12 +42,16 @@ function DestinationCard({ destination }) {
         <div className="flex flex-wrap gap-2">
           <Link
             to={`/destination/${destination.id}`}
+            onClick={(event) => event.stopPropagation()}
             className="btn-gradient inline-flex text-sm"
           >
             Explore
           </Link>
           <button
-            onClick={() => navigate(`/trip-planner?to=${encodeURIComponent(`${destination.name}, ${destination.state}`)}`)}
+            onClick={(event) => {
+              event.stopPropagation()
+              navigate(`/trip-planner?to=${encodeURIComponent(`${destination.name}, ${destination.state}`)}`)
+            }}
             className="btn-secondary inline-flex text-sm"
           >
             Add Destination

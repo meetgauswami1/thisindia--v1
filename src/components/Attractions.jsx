@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTravelData } from '../utils/TravelDataContext'
+import { div } from 'framer-motion/client'
 
 function Attractions({ onCardHover }) {
   const { travelData, activeMarkerId, setActiveMarkerId, loadingState, errors } = useTravelData()
@@ -8,7 +9,6 @@ function Attractions({ onCardHover }) {
 
   const sortedAttractions = useMemo(() => {
     const list = [...(travelData.attractions || [])]
-    console.log("Attractions from context:", travelData.attractions);
     if (sortBy === 'popularity') {
       return list.sort((a, b) => (b.totalRatings || 0) - (a.totalRatings || 0))
     }
@@ -19,7 +19,7 @@ function Attractions({ onCardHover }) {
 
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         <h2 className="heading-text text-2xl">Tourist Attractions</h2>
         <select
           value={sortBy}
@@ -29,14 +29,14 @@ function Attractions({ onCardHover }) {
           <option value="rating">Sort by Rating</option>
           <option value="popularity">Sort by Popularity</option>
         </select>
-      </div>
+      </div> */}
 
       {loadingState.fetchingData ? (
         <div className="card-surface p-4 text-sm text-slate-500 dark:text-slate-300">Loading attractions...</div>
       ) : errors.attractions ? (
         <div className="card-surface p-4 text-sm text-rose-500">{errors.attractions}</div>
       ) : !visible.length ? (
-        <div className="card-surface p-4 text-sm text-slate-500 dark:text-slate-300">No attractions found for this destination.</div>
+        <div></div>
       ) : (
         <>
           <div className="grid gap-4 md:grid-cols-2">
@@ -53,9 +53,13 @@ function Attractions({ onCardHover }) {
                   activeMarkerId === item.id ? 'ring-2 ring-orange-300 dark:ring-accent/60' : ''
                 }`}
               >
-                {item.image && (
-                  <img src={item.image} alt={item.name} className="h-40 w-full rounded-xl object-cover" loading="lazy" />
-                )}
+                {(() => {
+                  const fallbackImage = `https://source.unsplash.com/900x600/?${encodeURIComponent(`${item.name}, india landmark`)}`.replaceAll('%20', '+')
+                  const imageSrc = item.image || fallbackImage
+                  return item.image || fallbackImage ? (
+                    <img src={imageSrc} alt={item.name} className="h-40 w-full rounded-xl object-cover" loading="lazy" />
+                  ) : null
+                })()}
                 <h3 className="mt-3 text-lg font-bold text-secondary dark:text-orange-300">{item.name}</h3>
                 <p className="muted-text mt-1 text-sm">{item.description}</p>
                 <div className="mt-2 flex gap-2 text-xs">

@@ -7,6 +7,7 @@ import MobileNavbar from './components/MobileNavbar'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import AIAssistant from './pages/AIAssistant'
+import AboutUs from './pages/AboutUs'
 import DestinationDetails from './pages/DestinationDetails'
 import Explore from './pages/Explore'
 import Home from './pages/Home'
@@ -54,6 +55,7 @@ function App() {
           <Route path="/map-explorer" element={<MapExplorerPage />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/saved-trips" element={<SavedTripsPage />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Routes>
       </main>
       <Footer />

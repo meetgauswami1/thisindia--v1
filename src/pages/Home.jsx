@@ -1,5 +1,5 @@
 import { motion as Motion } from 'framer-motion'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DestinationCard from '../components/DestinationCard'
 import HeroSection from '../components/HeroSection'
@@ -11,13 +11,23 @@ import TrendingDestinations from '../components/TrendingDestinations'
 import WeatherWidget from '../components/WeatherWidget'
 import { destinations, heroSlides, travelCategories } from '../utils/destinationsData'
 import { useTravelData } from '../utils/TravelDataContext'
+import { useI18n } from '../utils/I18nContext'
 import { generateItinerary } from '../utils/travelUtils'
 
 function Home() {
   const [tripResult, setTripResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const { selectedLocation } = useTravelData()
+  const { selectedLocation, setLocationAndLoad } = useTravelData()
+  const { t } = useI18n()
+  const hiddenGems = useMemo(
+    () =>
+      [...destinations]
+        .filter((item) => item.popularity <= 40 || item.uniqueness >= 88)
+        .sort((a, b) => a.popularity - b.popularity || b.uniqueness - a.uniqueness)
+        .slice(0, 3),
+    [],
+  )
 
   const handleGenerate = (formData) => {
     setLoading(true)
@@ -27,9 +37,28 @@ function Home() {
     }, 700)
   }
 
+  const handleDestinationSelect = async (destination) => {
+    await setLocationAndLoad(`${destination.name}, ${destination.state}`)
+    navigate(`/explore?q=${encodeURIComponent(destination.name)}`)
+  }
+
   return (
     <div className="space-y-10">
       <HeroSection slides={heroSlides} />
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="heading-text text-2xl">{t('common.hiddenGemsTitle')}</h2>
+          <button onClick={() => navigate('/explore')} className="text-sm font-semibold text-primary dark:text-accent">
+            Explore rural picks
+          </button>
+        </div>
+        <p className="muted-text text-sm">Discover lesser-known villages, local trails, and authentic rural tourism experiences.</p>
+        <div className="grid gap-4 md:grid-cols-3">
+          {hiddenGems.map((destination) => (
+            <DestinationCard key={destination.id} destination={destination} onSelect={handleDestinationSelect} />
+          ))}
+        </div>
+      </section>
       <TrendingDestinations />
 
       {selectedLocation && (
@@ -67,14 +96,14 @@ function Home() {
 
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="heading-text text-2xl">Trending Hidden Destinations</h2>
+          <h2 className="heading-text text-2xl">{t('common.trendingTitle')}</h2>
           <button onClick={() => navigate('/explore')} className="text-sm font-semibold text-primary dark:text-accent">
             View all
           </button>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {destinations.slice(0, 3).map((destination) => (
-            <DestinationCard key={destination.id} destination={destination} />
+            <DestinationCard key={destination.id} destination={destination} onSelect={handleDestinationSelect} />
           ))}
         </div>
       </section>
