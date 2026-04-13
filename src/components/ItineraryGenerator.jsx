@@ -51,7 +51,7 @@ function ItineraryGenerator() {
   return (
     <>
       <section className="space-y-4">
-        <h2 className="heading-text text-2xl">AI Travel Itinerary Generator</h2>
+        {/* <h2 className="heading-text text-2xl">AI Travel Itinerary Generator</h2> */}
         {error && <div className="card-surface p-4 text-sm text-rose-500">{error}</div>}
         {itinerary && (
           <div className="card-surface space-y-3 p-5">

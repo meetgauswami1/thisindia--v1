@@ -7,6 +7,7 @@ import MobileNavbar from './components/MobileNavbar'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import AIAssistant from './pages/AIAssistant'
+import AboutUs from './pages/AboutUs'
 import DestinationDetails from './pages/DestinationDetails'
 import Explore from './pages/Explore'
 import Home from './pages/Home'
@@ -14,6 +15,8 @@ import MapExplorerPage from './pages/MapExplorerPage'
 import SavedTripsPage from './pages/SavedTripsPage'
 import TripPlanner from './pages/TripPlanner'
 import { useTravelData } from './utils/TravelDataContext'
+import { Toaster } from 'react-hot-toast'
+import BackToTop from './components/BackToTop'
 
 function App() {
   const location = useLocation()
@@ -21,6 +24,32 @@ function App() {
   const isDataLoading = loadingState.searchingLocation || loadingState.fetchingData
 
   return (
+     <>
+     
+    
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#1A1A2E',
+            color: '#FFF8F0',
+            border: '1px solid #E8652A',
+            borderRadius: '12px',
+            fontSize: '14px',
+          },
+          success: {
+            iconTheme: {
+              primary: '#E8652A',
+              secondary: '#FFF8F0',
+            },
+          },
+        }}
+      />
+
+
+  
+    
     <div className="app-surface min-h-screen">
       <ScrollToTop />
       <div className="pointer-events-none fixed inset-x-0 top-0 z-[90] h-[2px] bg-transparent">
@@ -54,12 +83,15 @@ function App() {
           <Route path="/map-explorer" element={<MapExplorerPage />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/saved-trips" element={<SavedTripsPage />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Routes>
       </main>
       <Footer />
       <BottomNavigation />
       <AIChatAssistant />
+      <BackToTop />
     </div>
+    </>
   )
 }
 

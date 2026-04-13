@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import CrowdPredictorCard from '../components/CrowdPredictorCard'
 import HiddenGemBadge from '../components/HiddenGemBadge'
 import WeatherCard from '../components/WeatherCard'
@@ -22,6 +23,25 @@ function DestinationDetails() {
       popularity: destination.popularity,
     })
   }, [destination])
+
+  // ✅ Functions AFTER destination is defined
+  const handleShare = async () => {
+    try {
+      await navigator.share({
+        title: destination.name,
+        text: `Check out ${destination.name} on ThisIndia! 🇮🇳`,
+        url: window.location.href
+      })
+    } catch {
+      await navigator.clipboard.writeText(window.location.href)
+      toast.success('Link copied! 📋')
+    }
+  }
+
+  const handleWhatsApp = () => {
+    const text = `Check out ${destination.name}, ${destination.state} on ThisIndia! 🇮🇳\n${window.location.href}`
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`)
+  }
 
   if (!destination || !crowd) {
     return <div className="card-surface p-8 text-center">Destination not found.</div>
@@ -111,10 +131,19 @@ function DestinationDetails() {
             Add to Destination
           </button>
           <button
-            onClick={() => saveDestination(destination)}
+            onClick={() => {
+              saveDestination(destination)
+              toast.success('Destination saved! ❤️')
+            }}
             className="btn-gradient text-sm"
           >
             Save Destination
+          </button>
+          <button onClick={handleShare} className="btn-secondary text-sm">
+            🔗 Share
+          </button>
+          <button onClick={handleWhatsApp} className="btn-secondary text-sm">
+            📱 WhatsApp
           </button>
         </div>
       </div>

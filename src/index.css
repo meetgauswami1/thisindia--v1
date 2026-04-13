@@ -10,6 +10,19 @@ html {
   scroll-behavior: smooth;
 }
 
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+.leaflet-pane {
+  z-index: 0 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1 !important;
+}
+
 body {
   margin: 0;
   font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;

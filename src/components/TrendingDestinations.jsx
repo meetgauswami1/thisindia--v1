@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { fetchDestinationImages } from '../services/imageService'
 import { useTravelData } from '../utils/TravelDataContext'
 
-const trendingCities = ['Paris', 'Dubai', 'Bali', 'Goa', 'Tokyo', 'London', 'Singapore']
+const trendingCities = ['Goa', 'Tirthan Valley', 'Majuli Island',  'Shnongpdeng', 'Kuttanad', 'Bundi']
 
 function TrendingDestinations() {
   const navigate = useNavigate()

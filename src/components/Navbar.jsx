@@ -14,7 +14,7 @@ const navLinks = [
   { labelKey: 'nav.savedTrips', path: '/saved-trips' },
 ]
 
-const baseLinkClass = 'text-xs font-medium transition-colors hover:text-primary dark:hover:text-accent xl:text-sm'
+const baseLinkClass = 'text-xs font-medium transition-all duration-200 hover:text-primary dark:hover:text-accent xl:text-sm relative pb-1'
 
 function Navbar() {
   const { isDark, toggleTheme } = useTheme()
@@ -34,8 +34,13 @@ function Navbar() {
             <NavLink
               key={link.path}
               to={link.path}
+              end={link.path === '/'}
               className={({ isActive }) =>
-                `${baseLinkClass} ${isActive ? 'text-primary dark:text-accent' : 'text-slate-700 dark:text-slate-200'}`
+                `${baseLinkClass} ${
+                  isActive
+                    ? 'text-primary dark:text-accent after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-orange-500 after:rounded-full'
+                    : 'text-slate-700 dark:text-slate-200'
+                }`
               }
             >
               {t(link.labelKey)}

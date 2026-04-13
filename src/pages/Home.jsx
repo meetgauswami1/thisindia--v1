@@ -1,5 +1,5 @@
 import { motion as Motion } from 'framer-motion'
-import { useState } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DestinationCard from '../components/DestinationCard'
 import HeroSection from '../components/HeroSection'
@@ -11,13 +11,58 @@ import TrendingDestinations from '../components/TrendingDestinations'
 import WeatherWidget from '../components/WeatherWidget'
 import { destinations, heroSlides, travelCategories } from '../utils/destinationsData'
 import { useTravelData } from '../utils/TravelDataContext'
+import { useI18n } from '../utils/I18nContext'
 import { generateItinerary } from '../utils/travelUtils'
+
+// Animated Counter Component
+function AnimatedCounter({ target, duration = 2000, suffix = '' }) {
+  const [count, setCount] = useState(0)
+  const ref = useRef(null)
+  const [started, setStarted] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStarted(true) },
+      { threshold: 0.5 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!started) return
+    let startTime = null
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp
+      const progress = Math.min((timestamp - startTime) / duration, 1)
+      setCount(Math.floor(progress * target))
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }, [started, target, duration])
+
+  return (
+    <span ref={ref}>
+      {count}{suffix}
+    </span>
+  )
+}
 
 function Home() {
   const [tripResult, setTripResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const { selectedLocation } = useTravelData()
+  const { selectedLocation, setLocationAndLoad } = useTravelData()
+  const { t } = useI18n()
+
+  const hiddenGems = useMemo(
+    () =>
+      [...destinations]
+        .filter((item) => item.popularity <= 40 || item.uniqueness >= 88)
+        .sort((a, b) => a.popularity - b.popularity || b.uniqueness - a.uniqueness)
+        .slice(0, 3),
+    [],
+  )
 
   const handleGenerate = (formData) => {
     setLoading(true)
@@ -27,9 +72,63 @@ function Home() {
     }, 700)
   }
 
+  const handleDestinationSelect = async (destination) => {
+    await setLocationAndLoad(`${destination.name}, ${destination.state}`)
+    navigate(`/explore?q=${encodeURIComponent(destination.name)}`)
+  }
+
   return (
     <div className="space-y-10">
       <HeroSection slides={heroSlides} />
+
+      {/* Animated Stats Section */}
+      <section className="rounded-2xl bg-sunset-gradient p-6 text-white shadow-card">
+        <h2 className="text-center text-2xl font-bold mb-6">
+          ThisIndia By The Numbers
+        </h2>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="text-center">
+            <p className="text-4xl font-bold">
+              <AnimatedCounter target={500} suffix="+" />
+            </p>
+            <p className="mt-1 text-sm text-white/80">Hidden Destinations</p>
+          </div>
+          <div className="text-center">
+            <p className="text-4xl font-bold">
+              <AnimatedCounter target={28} suffix="" />
+            </p>
+            <p className="mt-1 text-sm text-white/80">States Covered</p>
+          </div>
+          <div className="text-center">
+            <p className="text-4xl font-bold">
+              <AnimatedCounter target={10000} suffix="+" />
+            </p>
+            <p className="mt-1 text-sm text-white/80">Trips Planned</p>
+          </div>
+          <div className="text-center">
+            <p className="text-4xl font-bold">
+              <AnimatedCounter target={95} suffix="%" />
+            </p>
+            <p className="mt-1 text-sm text-white/80">Rural Communities Helped</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="heading-text text-2xl">{t('common.hiddenGemsTitle')}</h2>
+          <button onClick={() => navigate('/explore')} className="text-sm font-semibold text-primary dark:text-accent">
+            Explore rural picks
+          </button>
+        </div>
+        <p className="muted-text text-sm">Discover lesser-known villages, local trails, and authentic rural tourism experiences.</p>
+        <div className="grid gap-4 md:grid-cols-3">
+          {hiddenGems.map((destination) => (
+            <DestinationCard key={destination.id} destination={destination} onSelect={handleDestinationSelect} />
+          ))}
+        </div>
+      </section>
+
       <TrendingDestinations />
 
       {selectedLocation && (
@@ -67,14 +166,14 @@ function Home() {
 
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="heading-text text-2xl">Trending Hidden Destinations</h2>
+          <h2 className="heading-text text-2xl">{t('common.trendingTitle')}</h2>
           <button onClick={() => navigate('/explore')} className="text-sm font-semibold text-primary dark:text-accent">
             View all
           </button>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {destinations.slice(0, 3).map((destination) => (
-            <DestinationCard key={destination.id} destination={destination} />
+            <DestinationCard key={destination.id} destination={destination} onSelect={handleDestinationSelect} />
           ))}
         </div>
       </section>

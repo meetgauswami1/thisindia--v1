@@ -1,5 +1,6 @@
-import { useDeferredValue, useMemo } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import Attractions from '../components/Attractions'
 import DestinationCard from '../components/DestinationCard'
 import FlightsList from '../components/FlightsList'
@@ -14,7 +15,7 @@ import { useI18n } from '../utils/I18nContext'
 
 function Explore() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const { selectedLocation, errors, setActiveMarkerId } = useTravelData()
+  const { selectedLocation, errors, setActiveMarkerId, setLocationAndLoad } = useTravelData()
   const { t } = useI18n()
   const category = searchParams.get('category') || 'All'
   const query = searchParams.get('q') || ''
@@ -23,28 +24,51 @@ function Explore() {
 
   const filteredDestinations = useMemo(() => {
     const searchValue = deferredQuery.trim().toLowerCase()
-    return destinations.filter((destination) => {
-      const categoryMatch = category === 'All' || destination.category === category
-      if (!categoryMatch) {
-        return false
-      }
-      if (!searchValue) {
-        return true
-      }
-      return (
-        destination.name.toLowerCase().includes(searchValue) ||
-        destination.state.toLowerCase().includes(searchValue) ||
-        destination.description.toLowerCase().includes(searchValue)
-      )
-    })
+    return destinations
+      .filter((destination) => {
+        const categoryMatch = category === 'All' || destination.category === category
+        if (!categoryMatch) return false
+        if (!searchValue) return true
+        return (
+          destination.name.toLowerCase().includes(searchValue) ||
+          destination.state.toLowerCase().includes(searchValue) ||
+          destination.description.toLowerCase().includes(searchValue)
+        )
+      })
+      .sort((a, b) => {
+        const hiddenScoreA = a.uniqueness - a.popularity
+        const hiddenScoreB = b.uniqueness - b.popularity
+        return hiddenScoreB - hiddenScoreA
+      })
   }, [category, deferredQuery])
+
+  const autoLoadedCategoryRef = useRef('')
+
+  useEffect(() => {
+    if (category === 'All') {
+      autoLoadedCategoryRef.current = ''
+      return
+    }
+    if (!filteredDestinations.length) return
+    const firstMatch = filteredDestinations[0]
+    const autoLoadKey = `${category}:${firstMatch.id}`
+    if (autoLoadedCategoryRef.current === autoLoadKey) return
+    autoLoadedCategoryRef.current = autoLoadKey
+    setLocationAndLoad(`${firstMatch.name}, ${firstMatch.state}`)
+  }, [category, filteredDestinations, setLocationAndLoad])
 
   return (
     <section className="space-y-6">
       <header>
         <h1 className="heading-text text-3xl">{t('pages.exploreTitle')}</h1>
-        <p className="muted-text mt-1 text-sm">Find underrated places across India with AI-ready destination insights.</p>
-        {query && <p className="mt-2 text-sm font-semibold text-primary dark:text-accent">Showing results for "{query}"</p>}
+        <p className="muted-text mt-1 text-sm">
+          Find hidden villages, rural escapes, and authentic local experiences across India.
+        </p>
+        {query && (
+          <p className="mt-2 text-sm font-semibold text-primary dark:text-accent">
+            Showing results for "{query}"
+          </p>
+        )}
         {selectedLocation && (
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
             Coordinates: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
@@ -52,7 +76,31 @@ function Explore() {
         )}
       </header>
 
-      {errors.location && <div className="card-surface p-4 text-sm text-rose-500">{errors.location}</div>}
+      {/* Share Buttons */}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={async () => {
+            await navigator.clipboard.writeText(window.location.href)
+            toast.success('Link copied! 📋')
+          }}
+          className="btn-secondary text-sm"
+        >
+          🔗 Copy Link
+        </button>
+        <button
+          onClick={() => {
+            const text = `Explore hidden destinations on ThisIndia! 🇮🇳\n${window.location.href}`
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`)
+          }}
+          className="btn-secondary text-sm"
+        >
+           WhatsApp Share
+        </button>
+      </div>
+
+      {errors.location && (
+        <div className="card-surface p-4 text-sm text-rose-500">{errors.location}</div>
+      )}
 
       <div className="flex flex-wrap gap-2">
         {['All', ...travelCategories].map((item) => (
@@ -107,9 +155,7 @@ function Explore() {
           ))}
         </div>
       ) : (
-        <div className="card-surface border-dashed p-8 text-center text-slate-500 dark:text-slate-300">
-          No destinations matched your search. Try another city, state, or hidden destination.
-        </div>
+        <div></div>
       )}
     </section>
   )

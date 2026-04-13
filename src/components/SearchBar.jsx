@@ -1,9 +1,34 @@
 import { AnimatePresence, motion as Motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
-import { FiArrowRight, FiLoader, FiMapPin, FiNavigation, FiPlus, FiSearch, FiX } from 'react-icons/fi'
+import { FiArrowRight, FiClock, FiLoader, FiMapPin, FiNavigation, FiPlus, FiSearch, FiX } from 'react-icons/fi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchLocationSuggestions } from '../services/geocodingService'
 import { useTravelData } from '../utils/TravelDataContext'
+
+const HISTORY_KEY = 'thisindia_search_history'
+const MAX_HISTORY = 5
+
+const getHistory = () => {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
+  } catch {
+    return []
+  }
+}
+
+const saveToHistory = (label) => {
+  try {
+    const history = getHistory().filter((item) => item !== label)
+    history.unshift(label)
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)))
+  } catch {}
+}
+
+const clearHistory = () => {
+  try {
+    localStorage.removeItem(HISTORY_KEY)
+  } catch {}
+}
 
 function SearchBar({
   className = '',
@@ -26,9 +51,11 @@ function SearchBar({
   const [validationError, setValidationError] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [activeIndex, setActiveIndex] = useState(0)
-  const query = activeField === 'from' ? fromQuery : toQuery
+  const [history, setHistory] = useState(getHistory)
 
+  const query = activeField === 'from' ? fromQuery : toQuery
   const visibleSuggestions = useMemo(() => suggestions.slice(0, 8), [suggestions])
+  const showHistory = open && !query.trim() && history.length > 0
 
   useEffect(() => {
     if (!query.trim()) {
@@ -37,7 +64,6 @@ function SearchBar({
       setLoading(false)
       return
     }
-
     setLoading(true)
     const timer = setTimeout(async () => {
       try {
@@ -50,7 +76,6 @@ function SearchBar({
         setLoading(false)
       }
     }, 350)
-
     return () => clearTimeout(timer)
   }, [query])
 
@@ -90,21 +115,19 @@ function SearchBar({
       setFromQuery(label)
       setOpen(false)
       setValidationError('')
-      if (onSelected) {
-        onSelected(selection)
-      }
+      if (onSelected) onSelected(selection)
       return
     }
     setToQuery(label)
     setOpen(false)
     setValidationError('')
+    saveToHistory(label)
+    setHistory(getHistory())
     await setLocationAndLoad(selection)
     if (navigateOnSelect) {
       navigate(`/explore?q=${encodeURIComponent(label)}`)
     }
-    if (onSelected) {
-      onSelected(selection)
-    }
+    if (onSelected) onSelected(selection)
   }
 
   const handleSearch = async () => {
@@ -118,9 +141,7 @@ function SearchBar({
   }
 
   const handleKeyDown = (event) => {
-    if (!open) {
-      setOpen(true)
-    }
+    if (!open) setOpen(true)
     if (event.key === 'ArrowDown' && visibleSuggestions.length) {
       event.preventDefault()
       setActiveIndex((prev) => (prev + 1) % visibleSuggestions.length)
@@ -138,9 +159,7 @@ function SearchBar({
       event.preventDefault()
       handleSearch()
     }
-    if (event.key === 'Escape') {
-      setOpen(false)
-    }
+    if (event.key === 'Escape') setOpen(false)
   }
 
   const wrapperClass = isCompact
@@ -246,9 +265,64 @@ function SearchBar({
           </>
         )}
       </div>
-      {validationError && <p className="mt-2 px-1 text-xs text-rose-500">{validationError}</p>}
+
+      {validationError && (
+        <p className="mt-2 px-1 text-xs text-rose-500">{validationError}</p>
+      )}
+
       <AnimatePresence>
-        {open && (loading || visibleSuggestions.length || error) && (
+        {/* Recent Search History */}
+        {showHistory && !loading && !visibleSuggestions.length && (
+          <Motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className="absolute left-0 right-0 top-full z-[95] mt-2 rounded-2xl border border-orange-100 bg-white shadow-card dark:border-slate-700 dark:bg-darkcard"
+          >
+            <div className="flex items-center justify-between px-4 py-2 border-b border-orange-50 dark:border-slate-700">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                🕐 Recent Searches
+              </p>
+              <button
+                onPointerDown={() => {
+                  clearHistory()
+                  setHistory([])
+                }}
+                className="text-xs text-rose-400 hover:text-rose-500"
+              >
+                Clear All
+              </button>
+            </div>
+            {history.map((item) => (
+              <div
+                key={item}
+                className="flex items-center justify-between gap-2 px-4 py-3 hover:bg-orange-50 dark:hover:bg-slate-800 cursor-pointer"
+              >
+                <button
+                  onPointerDown={() => handleSelect(item)}
+                  className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-200 flex-1 text-left"
+                >
+                  <FiClock className="text-orange-400 shrink-0" />
+                  {item}
+                </button>
+                <button
+                  onPointerDown={(e) => {
+                    e.stopPropagation()
+                    const updated = history.filter((h) => h !== item)
+                    localStorage.setItem(HISTORY_KEY, JSON.stringify(updated))
+                    setHistory(updated)
+                  }}
+                  className="text-slate-400 hover:text-rose-400"
+                >
+                  <FiX className="text-xs" />
+                </button>
+              </div>
+            ))}
+          </Motion.div>
+        )}
+
+        {/* Suggestions Dropdown */}
+        {open && (loading || visibleSuggestions.length > 0 || (error && query.trim())) && (
           <Motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -256,7 +330,9 @@ function SearchBar({
             className="absolute left-0 right-0 top-full z-[95] mt-2 max-h-[52vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-orange-100 bg-white shadow-card dark:border-slate-700 dark:bg-darkcard"
           >
             {loading ? (
-              <p className="px-4 py-3 text-sm text-slate-500 dark:text-slate-300">Loading suggestions...</p>
+              <p className="px-4 py-3 text-sm text-slate-500 dark:text-slate-300">
+                Loading suggestions...
+              </p>
             ) : visibleSuggestions.length ? (
               visibleSuggestions.map((item, index) => (
                 <div

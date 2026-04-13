@@ -14,5 +14,22 @@
     "savedTripsTitle": "सेव्ड ट्रिप्स",
     "mapExplorerTitle": "मैप एक्सप्लोरर",
     "aiAssistantTitle": "एआई असिस्टेंट"
+  },
+  "common": {
+    "hiddenGemsTitle": "भारत के छिपे हुए रत्न",
+    "trendingTitle": "ट्रेंडिंग छिपे हुए गंतव्य",
+    "flightSearchTitle": "फ़्लाइट खोज",
+    "origin": "प्रस्थान",
+    "destination": "गंतव्य",
+    "date": "तारीख",
+    "searchFlights": "फ़्लाइट खोजें",
+    "tripFrom": "कहाँ से",
+    "tripTo": "कहाँ तक",
+    "tripDuration": "यात्रा अवधि",
+    "budget": "बजट",
+    "travelers": "यात्री",
+    "travelType": "यात्रा प्रकार",
+    "travelStyle": "यात्रा शैली",
+    "generatePlan": "एआई यात्रा योजना बनाएं"
   }
 }

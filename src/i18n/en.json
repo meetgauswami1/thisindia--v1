@@ -3,7 +3,7 @@
     "home": "Home",
     "explore": "Explore",
     "tripPlanner": "Trip Planner",
-    "mapExplorer": "Map Explorer",
+    "mapExplorer": "BHARAT",
     "aiAssistant": "AI Assistant",
     "savedTrips": "Saved Trips",
     "language": "Language"
@@ -12,7 +12,24 @@
     "exploreTitle": "Explore Hidden Destinations",
     "tripPlannerTitle": "Trip Planner",
     "savedTripsTitle": "Saved Trips",
-    "mapExplorerTitle": "Map Explorer",
+    "mapExplorerTitle": "BHARAT",
     "aiAssistantTitle": "AI Assistant"
+  },
+  "common": {
+    "hiddenGemsTitle": "Hidden Gems of India",
+    "trendingTitle": "Trending Hidden Destinations",
+    "flightSearchTitle": "Flight Search",
+    "origin": "Origin",
+    "destination": "Destination",
+    "date": "Date",
+    "searchFlights": "Search Flights",
+    "tripFrom": "From",
+    "tripTo": "To",
+    "tripDuration": "Trip Duration",
+    "budget": "Budget",
+    "travelers": "Travelers",
+    "travelType": "Travel Type",
+    "travelStyle": "Travel Style",
+    "generatePlan": "Generate AI Travel Plan"
   }
 }
