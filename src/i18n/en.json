@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "explore": "Explore",
+    "hiddenGems": "Hidden Gems",
     "tripPlanner": "Trip Planner",
     "mapExplorer": "BHARAT",
     "aiAssistant": "AI Assistant",
@@ -26,7 +27,7 @@
     "tripFrom": "From",
     "tripTo": "To",
     "tripDuration": "Trip Duration",
-    "budget": "Budget",
+    "budget": "Budget (Per Person)",
     "travelers": "Travelers",
     "travelType": "Travel Type",
     "travelStyle": "Travel Style",

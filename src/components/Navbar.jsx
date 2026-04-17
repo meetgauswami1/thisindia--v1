@@ -7,7 +7,7 @@ import SearchBar from './SearchBar'
 
 const navLinks = [
   { labelKey: 'nav.home', path: '/' },
-  { labelKey: 'nav.explore', path: '/explore' },
+  // { labelKey: 'nav.hiddenGems', path: '/hidden-gems' },
   { labelKey: 'nav.tripPlanner', path: '/trip-planner' },
   { labelKey: 'nav.mapExplorer', path: '/map-explorer' },
   { labelKey: 'nav.aiAssistant', path: '/ai-assistant' },

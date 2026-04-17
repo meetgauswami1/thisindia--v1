@@ -11,12 +11,14 @@ const defaultForm = {
   duration: '3',
   durationMode: 'preset',
   customDuration: '3 days',
-  budget: '50000',
+  budget: '',
   members: '2',
   customMembers: '',
   travelStyle: 'Culture',
   travelType: 'Solo',
 }
+
+
 
 function TripPlannerForm({ onGenerate, compact = false }) {
   const [searchParams] = useSearchParams()
@@ -352,14 +354,17 @@ function TripPlannerForm({ onGenerate, compact = false }) {
           <span className="font-semibold text-slate-700 dark:text-slate-200">{t('common.travelType')}</span>
           <select
             value={form.travelType}
+            
             onChange={(event) => setForm((prev) => ({ ...prev, travelType: event.target.value }))}
             className="input-surface w-full"
           >
             {['Solo', 'Couple', 'Family', 'Friends'].map((type) => (
+      
               <option key={type} value={type}>
                 {type}
               </option>
             ))}
+            
           </select>
         </label>
         <label className="space-y-1 text-sm">

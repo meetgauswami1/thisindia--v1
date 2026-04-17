@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Attractions from '../components/Attractions'
@@ -17,10 +17,56 @@ function Explore() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { selectedLocation, errors, setActiveMarkerId, setLocationAndLoad } = useTravelData()
   const { t } = useI18n()
+
+  // ✅ Video states
+  const [videos, setVideos] = useState([])
+  const [selectedVideo, setSelectedVideo] = useState(null)
+
   const category = searchParams.get('category') || 'All'
   const query = searchParams.get('q') || ''
   const deferredQuery = useDeferredValue(query)
   const isSearching = deferredQuery !== query
+
+  // 🔥 NEW: handle query → load location (MAIN FIX)
+  const lastQueryRef = useRef('')
+
+  useEffect(() => {
+    if (!query) return
+
+    const formattedQuery = `${query}, India`
+
+    // avoid duplicate calls
+    if (lastQueryRef.current === formattedQuery) return
+    lastQueryRef.current = formattedQuery
+
+    const timer = setTimeout(() => {
+      setLocationAndLoad(formattedQuery)
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [query, setLocationAndLoad])
+
+  // ✅ Fetch YouTube Videos
+  const fetchVideos = async (searchQuery) => {
+    if (!searchQuery) {
+      setVideos([])
+      return
+    }
+
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchQuery} travel vlog India&type=video&maxResults=6&key=AIzaSyB8vPCEaPWc6fw61uIF3Usr-tCoAHrLdEM`
+      )
+      const data = await res.json()
+      setVideos(data.items || [])
+    } catch (err) {
+      console.error('Video fetch error:', err)
+    }
+  }
+
+  useEffect(() => {
+    fetchVideos(query)
+  }, [query])
 
   const filteredDestinations = useMemo(() => {
     const searchValue = deferredQuery.trim().toLowerCase()
@@ -64,11 +110,13 @@ function Explore() {
         <p className="muted-text mt-1 text-sm">
           Find hidden villages, rural escapes, and authentic local experiences across India.
         </p>
+
         {query && (
           <p className="mt-2 text-sm font-semibold text-primary dark:text-accent">
             Showing results for "{query}"
           </p>
         )}
+
         {selectedLocation && (
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
             Coordinates: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
@@ -87,6 +135,7 @@ function Explore() {
         >
           🔗 Copy Link
         </button>
+
         <button
           onClick={() => {
             const text = `Explore hidden destinations on ThisIndia! 🇮🇳\n${window.location.href}`
@@ -94,7 +143,7 @@ function Explore() {
           }}
           className="btn-secondary text-sm"
         >
-           WhatsApp Share
+          WhatsApp Share
         </button>
       </div>
 
@@ -141,7 +190,80 @@ function Explore() {
       <WeatherWidget />
       <HotelsList />
       <FlightsList />
+
+      {/* Image Gallery */}
       <ImageGallery />
+
+      {/* 🎥 YouTube Video Section */}
+      {videos.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white">
+            🎥 Travel Videos
+          </h2>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {videos.map((video) => {
+              const videoId = video.id.videoId
+              const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+
+              return (
+                <div
+                  key={videoId}
+                  onClick={() => setSelectedVideo(videoId)}
+                  className="relative cursor-pointer rounded-xl overflow-hidden group"
+                >
+                  <img
+                    src={thumbnail}
+                    className="w-full h-48 object-cover group-hover:scale-105 transition"
+                  />
+
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition" />
+
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white/90 p-3 rounded-full text-black text-lg">
+                      ▶
+                    </div>
+                  </div>
+
+                  <p className="absolute bottom-0 text-white text-sm p-2 line-clamp-2">
+                    {video.snippet.title}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* 🎬 Video Modal */}
+      {selectedVideo && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div
+            className="relative w-full max-w-3xl mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedVideo(null)}
+              className="absolute -top-10 right-0 text-white text-2xl"
+            >
+              ✕
+            </button>
+
+            <div className="aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1`}
+                className="w-full h-full rounded-xl"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <ItineraryGenerator />
 
       {isSearching ? (
