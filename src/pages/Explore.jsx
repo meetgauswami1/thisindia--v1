@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+=======
+import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
 import { useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Attractions from '../components/Attractions'
@@ -12,6 +16,7 @@ import WeatherWidget from '../components/WeatherWidget'
 import { destinations, travelCategories } from '../utils/destinationsData'
 import { useTravelData } from '../utils/TravelDataContext'
 import { useI18n } from '../utils/I18nContext'
+import { div } from 'framer-motion/client'
 
 function Explore() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -73,8 +78,17 @@ function Explore() {
     return destinations
       .filter((destination) => {
         const categoryMatch = category === 'All' || destination.category === category
+<<<<<<< HEAD
         if (!categoryMatch) return false
         if (!searchValue) return true
+=======
+        if (!categoryMatch) {
+          return false
+        }
+        if (!searchValue) {
+          return true
+        }
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
         return (
           destination.name.toLowerCase().includes(searchValue) ||
           destination.state.toLowerCase().includes(searchValue) ||
@@ -87,6 +101,24 @@ function Explore() {
         return hiddenScoreB - hiddenScoreA
       })
   }, [category, deferredQuery])
+  const autoLoadedCategoryRef = useRef('')
+
+  useEffect(() => {
+    if (category === 'All') {
+      autoLoadedCategoryRef.current = ''
+      return
+    }
+    if (!filteredDestinations.length) {
+      return
+    }
+    const firstMatch = filteredDestinations[0]
+    const autoLoadKey = `${category}:${firstMatch.id}`
+    if (autoLoadedCategoryRef.current === autoLoadKey) {
+      return
+    }
+    autoLoadedCategoryRef.current = autoLoadKey
+    setLocationAndLoad(`${firstMatch.name}, ${firstMatch.state}`)
+  }, [category, filteredDestinations, setLocationAndLoad])
 
   const autoLoadedCategoryRef = useRef('')
 
@@ -107,6 +139,7 @@ function Explore() {
     <section className="space-y-6">
       <header>
         <h1 className="heading-text text-3xl">{t('pages.exploreTitle')}</h1>
+<<<<<<< HEAD
         <p className="muted-text mt-1 text-sm">
           Find hidden villages, rural escapes, and authentic local experiences across India.
         </p>
@@ -117,6 +150,10 @@ function Explore() {
           </p>
         )}
 
+=======
+        <p className="muted-text mt-1 text-sm">Find hidden villages, rural escapes, and authentic local experiences across India.</p>
+        {query && <p className="mt-2 text-sm font-semibold text-primary dark:text-accent">Showing results for "{query}"</p>}
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
         {selectedLocation && (
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
             Coordinates: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
@@ -278,6 +315,12 @@ function Explore() {
         </div>
       ) : (
         <div></div>
+<<<<<<< HEAD
+=======
+        // <div className="card-surface border-dashed p-8 text-center text-slate-500 dark:text-slate-300">
+        //   No destinations matched your search. Try another city, state, or hidden destination.
+        // </div>
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
       )}
     </section>
   )

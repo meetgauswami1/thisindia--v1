@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+<<<<<<< HEAD
 import toast from 'react-hot-toast'
+=======
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
 import { useTravel } from '../utils/TravelContext'
 import { useI18n } from '../utils/I18nContext'
 import { downloadTripGuidePdf, generateItinerary } from '../utils/travelUtils'
@@ -9,10 +12,20 @@ import TripPlannerForm from '../components/TripPlannerForm'
 
 function TripPlanner() {
   const [result, setResult] = useState(null)
+  const [showSavedToast, setShowSavedToast] = useState(false)
   const { addSavedTrip } = useTravel()
   const { t } = useI18n()
   const location = useLocation()
   const navigate = useNavigate()
+<<<<<<< HEAD
+=======
+
+  useEffect(() => {
+    if (!showSavedToast) return undefined
+    const timer = setTimeout(() => setShowSavedToast(false), 5000)
+    return () => clearTimeout(timer)
+  }, [showSavedToast])
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
 
   const handleGenerate = (formData) => {
     setResult(generateItinerary(formData))
@@ -22,6 +35,7 @@ function TripPlanner() {
   const handleSave = () => {
     if (result) {
       addSavedTrip(result)
+<<<<<<< HEAD
       toast.success(
         (toastInstance) => (
           <div className="flex flex-col gap-2">
@@ -39,6 +53,9 @@ function TripPlanner() {
         ),
         { duration: 5000 }
       )
+=======
+      setShowSavedToast(true)
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
     }
   }
 
@@ -64,6 +81,20 @@ function TripPlanner() {
 
   return (
     <section className="space-y-6">
+      {showSavedToast && (
+        <div className="fixed right-4 top-24 z-[80] w-full max-w-sm rounded-2xl border border-orange-200 bg-white p-4 shadow-card dark:border-slate-600 dark:bg-darkcard">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Your trip has been saved! 🎉</p>
+          <button
+            onClick={() => {
+              setShowSavedToast(false)
+              navigate('/saved-trips')
+            }}
+            className="mt-3 btn-gradient text-xs"
+          >
+            Go to Saved Trips
+          </button>
+        </div>
+      )}
       <header>
         <h1 className="heading-text text-3xl">{t('pages.tripPlannerTitle')}</h1>
         <p className="muted-text mt-1 text-sm">
@@ -96,6 +127,10 @@ function TripPlanner() {
             ))}
           </div>
           <div className="flex flex-wrap gap-2">
+<<<<<<< HEAD
+=======
+            {/* <button className="btn-secondary text-sm">View on Map</button> */}
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
             <button onClick={handleSave} className="btn-gradient text-sm">
               Save This Trip
             </button>

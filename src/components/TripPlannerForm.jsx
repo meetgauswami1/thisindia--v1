@@ -11,7 +11,11 @@ const defaultForm = {
   duration: '3',
   durationMode: 'preset',
   customDuration: '3 days',
+<<<<<<< HEAD
   budget: '',
+=======
+  budget: '50000',
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
   members: '2',
   customMembers: '',
   travelStyle: 'Culture',
@@ -313,6 +317,7 @@ function TripPlannerForm({ onGenerate, compact = false }) {
               >
                 {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount)}
               </button>
+<<<<<<< HEAD
             ))}
           </div>
           {formattedBudget && (
@@ -369,6 +374,63 @@ function TripPlannerForm({ onGenerate, compact = false }) {
         </label>
         <label className="space-y-1 text-sm">
           <span className="font-semibold text-slate-700 dark:text-slate-200">{t('common.travelStyle')}</span>
+=======
+            ))}
+          </div>
+          {formattedBudget && (
+            <p className="text-xs font-semibold text-primary dark:text-accent">Selected budget: {formattedBudget}</p>
+          )}
+        </label>
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-slate-700 dark:text-slate-200">{t('common.travelers')}</span>
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
+          <select
+            value={form.members}
+            onChange={(event) => setForm((prev) => ({ ...prev, members: event.target.value }))}
+            className="input-surface w-full transition-all duration-200"
+          >
+            {[1, 2, 3, 4, 5, 6, 7].map((count) => (
+              <option key={count} value={count}>
+                {count}
+              </option>
+            ))}
+            <option value="custom">Custom</option>
+          </select>
+          <AnimatePresence initial={false}>
+            {form.members === 'custom' && (
+              <Motion.input
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                type="number"
+                min={1}
+                max={50}
+                value={form.customMembers}
+                onChange={(event) => setForm((prev) => ({ ...prev, customMembers: event.target.value }))}
+                className="input-surface w-full"
+                placeholder="Enter travelers (1-50)"
+              />
+            )}
+          </AnimatePresence>
+        </label>
+<<<<<<< HEAD
+=======
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-slate-700 dark:text-slate-200">{t('common.travelType')}</span>
+          <select
+            value={form.travelType}
+            onChange={(event) => setForm((prev) => ({ ...prev, travelType: event.target.value }))}
+            className="input-surface w-full"
+          >
+            {['Solo', 'Couple', 'Family', 'Friends'].map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-slate-700 dark:text-slate-200">{t('common.travelStyle')}</span>
           <select
             value={form.travelStyle}
             onChange={(event) => setForm((prev) => ({ ...prev, travelStyle: event.target.value }))}
@@ -381,6 +443,7 @@ function TripPlannerForm({ onGenerate, compact = false }) {
             ))}
           </select>
         </label>
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
       </div>
       {validationError && <p className="text-sm text-rose-500">{validationError}</p>}
       <button className="btn-gradient text-sm">

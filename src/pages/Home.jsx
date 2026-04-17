@@ -1,5 +1,9 @@
 import { motion as Motion } from 'framer-motion'
+<<<<<<< HEAD
 import { useMemo, useState, useEffect, useRef } from 'react'
+=======
+import { useMemo, useState } from 'react'
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
 import { useNavigate } from 'react-router-dom'
 import DestinationCard from '../components/DestinationCard'
 import HeroSection from '../components/HeroSection'
@@ -54,7 +58,10 @@ function Home() {
   const navigate = useNavigate()
   const { selectedLocation, setLocationAndLoad } = useTravelData()
   const { t } = useI18n()
+<<<<<<< HEAD
 
+=======
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
   const hiddenGems = useMemo(
     () =>
       [...destinations]
@@ -80,6 +87,7 @@ function Home() {
   return (
     <div className="space-y-10">
       <HeroSection slides={heroSlides} />
+<<<<<<< HEAD
 
       {/* Animated Stats Section */}
       <section className="rounded-2xl bg-sunset-gradient p-6 text-white shadow-card">
@@ -114,6 +122,8 @@ function Home() {
         </div>
       </section>
 
+=======
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="heading-text text-2xl">{t('common.hiddenGemsTitle')}</h2>
@@ -128,7 +138,10 @@ function Home() {
           ))}
         </div>
       </section>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
       <TrendingDestinations />
 
       {selectedLocation && (

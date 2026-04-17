@@ -27,7 +27,11 @@
     "tripFrom": "From",
     "tripTo": "To",
     "tripDuration": "Trip Duration",
+<<<<<<< HEAD
     "budget": "Budget (Per Person)",
+=======
+    "budget": "Budget",
+>>>>>>> 084d6d2a21a9340457da8a2780c353eb1957cc9d
     "travelers": "Travelers",
     "travelType": "Travel Type",
     "travelStyle": "Travel Style",
